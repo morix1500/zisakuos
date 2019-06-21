@@ -7,7 +7,7 @@ void HariMain(void) {
 	p = (char *) 0xa0000;
 
 	for (i = 0; i <= 0xaffff; i++) {
-		*(p + i) = i & 0x0f;  // MOV BYTE [ECX], (i & 0x0f) がやりたい
+		p[i] = i & 0x0f;  // MOV BYTE [ECX], (i & 0x0f) がやりたい
 	}
 	for (;;) {
 		io_hlt();
