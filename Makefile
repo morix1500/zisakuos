@@ -1,5 +1,5 @@
-ipl.bin : ipl.nas Makefile
-	z_tools/nask.exe ipl.nas ipl.bin ipl.lst
+ipl.bin : ipl10.nas Makefile
+	z_tools/nask.exe ipl10.nas ipl.bin ipl.lst
 
 haribote.sys : haribote.nas Makefile
 	z_tools/nask.exe haribote.nas haribote.sys haribote.lst
@@ -15,9 +15,6 @@ asm :
 	make -r ipl.bin
 
 run :
-	make img
-	qemu-system-i386 haribote.img
-runFp :
 	make img
 	qemu-system-i386 -fda haribote.img
 
