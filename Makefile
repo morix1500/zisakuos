@@ -13,6 +13,9 @@ asm :
 run :
 	make img
 	qemu-system-i386 helloos.img
+runFp :
+	make img
+	qemu-system-i386 -fda helloos.img
 
 clean :
 	rm -f ipl.bin
