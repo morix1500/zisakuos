@@ -1,8 +1,8 @@
 ipl.bin : ipl10.nas Makefile
 	z_tools/nask.exe ipl10.nas ipl.bin ipl.lst
 
-haribote.sys : haribote.nas Makefile
-	z_tools/nask.exe haribote.nas haribote.sys haribote.lst
+haribote.sys : asmhead.nas Makefile
+	z_tools/nask.exe asmhead.nas haribote.sys haribote.lst
 
 haribote.img : ipl.bin haribote.sys Makefile
 	mformat -f 1440 -C -B ipl.bin -i haribote.img ::
