@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define COL8_000000 0
 #define COL8_FF0000 1 
 #define COL8_00FF00 2
@@ -45,6 +46,10 @@ void HariMain(void) {
 	putfont8_asc(binfo->vram, binfo->scrnx, 8,  8, COL8_FFFFFF, "ABC 123");
 	putfont8_asc(binfo->vram, binfo->scrnx, 31, 31, COL8_000000, "Haribote OS.");
 	putfont8_asc(binfo->vram, binfo->scrnx, 30, 30, COL8_FFFFFF, "Haribote OS.");
+
+	char *s;
+	sprintf(s, "scrnx = %d", binfo->scrnx);
+	putfont8_asc(binfo->vram, binfo->scrnx, 16,  64, COL8_FFFFFF, s);
 
 	for (;;) {
 		io_hlt();
