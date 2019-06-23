@@ -6,7 +6,7 @@ void init_gdtidt(void) {
 
 	// GDTの初期化
 	int i;
-	for (i = 0; i < 8192; i++) {
+	for (i = 0; i <= LIMIT_GDT / 8; i++) {
 		set_segmdesc(gdt + i, 0, 0, 0); // 8バイトずつ増える
 	}
 	// セグメント番号1, Limitが4GB, 番地が0。つまりCPUの全メモリをそのまま表してる
@@ -21,6 +21,12 @@ void init_gdtidt(void) {
 		set_gatedesc(idt + i, 0, 0, 0);
 	}
 	load_idtr(LIMIT_IDT, ADR_IDT);
+
+	// IDTの設定
+	// 2 << 3はセグメント番号2番を使うことを表す。セグメント番号下位3bitは別の意味があるので4bit目に設定
+	set_gatedesc(idt + 0x21, (int) asm_inthandler21, 2 << 3, AR_INTGATE32);
+	set_gatedesc(idt + 0x27, (int) asm_inthandler27, 2 << 3, AR_INTGATE32);
+	set_gatedesc(idt + 0x2c, (int) asm_inthandler2c, 2 << 3, AR_INTGATE32);
 
 	return;
 }
