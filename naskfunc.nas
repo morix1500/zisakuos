@@ -85,7 +85,7 @@ _io_store_eflags: ; void io_store_eflags(int eflags);
 _load_gdtr:  ; void load_gdtr(int limit, int addr);
 	MOV  AX,[ESP+4] ; limit
 	MOV  [ESP+6],AX
-	LGDT [ESP+6]
+	LGDT [ESP+6]    ; GDTRという48bitレジスタに読み込む
 	RET
 
 _load_idtr:  ; void load_idtr(int limit, int addr);
