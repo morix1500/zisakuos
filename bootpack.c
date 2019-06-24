@@ -2,7 +2,6 @@
 #include "bootpack.h"
 
 unsigned int memtest(unsigned int start, unsigned int end);
-unsigned int memtest_sub(unsigned int start, unsigned int end);
 
 void HariMain(void) {
 	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
@@ -32,7 +31,7 @@ void HariMain(void) {
 	sprintf(s, "(%d, %d)", mx, my);
 	putfont8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, s);
 
-	i = memtest(0x00400000, 0xbfffffff) / (1024 * 1024);
+	i = memtest(0x00400000, 0xbffffffff) / (1024 * 1024);
 	sprintf(s, "memory %dMB", i);
 	putfont8_asc(binfo->vram, binfo->scrnx, 0, 32, COL8_FFFFFF, s);
 
@@ -119,25 +118,5 @@ unsigned int memtest(unsigned int start, unsigned int end) {
 		store_cr0(cr0);
 	}
 
-	return i;
-}
-unsigned int memtest_sub(unsigned int start, unsigned int end) {
-	unsigned int i, *p, old, pat0 = 0xaa55aa55, pat1 = 0x55aa55aa;
-	for (i = start; i <= end; i += 0x1000) { // 4KBずつ
-		p   = (unsigned int *) (i + 0xffc); // 末尾の4byte 
-		old = *p;         // いじる前の値を覚えておく
-		*p  = pat0;       // ためしに書いてみる
-		*p  ^= 0xffffffff; // そしてそれを反転してみる
-		if (*p != pat1) { // 反転結果になったか？
-not_memory:
-			*p = old;
-			break;
-		}
-		*p ^= 0xffffffff; // もう一度反転してみる
-		if (*p != pat0) { // 元に戻ったか？
-			goto not_memory;
-		}
-		*p = old; // いじった値を元に戻す
-	}
 	return i;
 }
