@@ -45,8 +45,6 @@ void HariMain(void) {
 	init_screen8(buf_back, binfo->scrnx, binfo->scrny);
 	init_mouse_cursor8(buf_mouse, 99);
 	make_window8(buf_win, 160, 52, "counter");
-	putfont8_asc(buf_win, 160, 24, 28, COL8_000000, "Welcom to");
-	putfont8_asc(buf_win, 160, 24, 44, COL8_000000, "Haribote-OS!!");
 	sheet_slide(sht_back, 0, 0);
 	mx = (binfo->scrnx - 16) / 2;      // 画面中央になるように座標計算
 	my = (binfo->scrny - 28 - 16) / 2;
