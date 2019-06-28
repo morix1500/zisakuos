@@ -180,7 +180,8 @@ struct TIMER {
 };
 
 struct TIMERCTL {
-	unsigned int count, next;
+	unsigned int count, next, using;
+	struct TIMER *timers[MAX_TIMER];
 	struct TIMER timer[MAX_TIMER];
 };
 extern struct TIMERCTL timerctl;
