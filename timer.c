@@ -17,7 +17,7 @@ void init_pit(void) {
 	timerctl.next  = 0xffffffff; // 最初は作動中タイマがないので
 	timerctl.using = 0;
 	for (i = 0; i < MAX_TIMER; i++) {
-		timerctl.timer[i].flags = 0; // 未使用
+		timerctl.timers0[i].flags = 0; // 未使用
 	}
 	return;
 }
@@ -25,9 +25,9 @@ void init_pit(void) {
 struct TIMER *timer_alloc(void) {
 	int i;
 	for (i = 0; i < MAX_TIMER; i++) {
-		if (timerctl.timer[i].flags == 0) {
-			timerctl.timer[i].flags = TIMER_FLAGS_ALLOC;
-			return &timerctl.timer[i];
+		if (timerctl.timers0[i].flags == 0) {
+			timerctl.timers0[i].flags = TIMER_FLAGS_ALLOC;
+			return &timerctl.timers0[i];
 		}
 	}
 	return 0; // 見つからなかった

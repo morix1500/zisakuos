@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "bootpack.h"
+#include <stdio.h>
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title);
 void putfonts8_asc_sht(struct SHEET *sht, int x, int y, int c, int b, char *s, int l);
@@ -9,7 +9,7 @@ void HariMain(void) {
 	struct FIFO8 timerfifo;
 	char s[40], keybuf[32], mousebuf[128], timerbuf[8];
 	struct TIMER *timer, *timer2, *timer3;
-	int mx, my, i;
+	int mx, my, i, count = 0;
 	unsigned int memtotal;
 	struct MOUSE_DEC mdec;
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
@@ -32,11 +32,9 @@ void HariMain(void) {
 	timer = timer_alloc();
 	timer_init(timer, &timerfifo, 10);
 	timer_settime(timer, 1000);
-
 	timer2 = timer_alloc();
 	timer_init(timer2, &timerfifo, 3);
 	timer_settime(timer2, 300);
-
 	timer3 = timer_alloc();
 	timer_init(timer3, &timerfifo, 1);
 	timer_settime(timer3, 50);
@@ -76,8 +74,8 @@ void HariMain(void) {
 	putfonts8_asc_sht(sht_back, 0, 32, COL8_FFFFFF, COL8_008484, s, 40);
 
 	for (;;) {
-		sprintf(s, "%010d", timerctl.count);
-		putfonts8_asc_sht(sht_win, 40, 28, COL8_000000, COL8_C6C6C6, s, 10);
+		count++;
+		sheet_slide(sht_mouse, mx, my); //これがないと動かない
 
 		io_cli();
 		if (fifo8_status(&keyfifo) + fifo8_status(&mousefifo) + fifo8_status(&timerfifo) == 0) {
@@ -126,8 +124,11 @@ void HariMain(void) {
 				io_sti();
 				if (i == 10) {
 					putfonts8_asc_sht(sht_back, 0, 64, COL8_FFFFFF, COL8_008484, "10[sec]", 7);
+					sprintf(s, "%010d", count);
+					putfonts8_asc_sht(sht_win, 40, 28, COL8_000000, COL8_C6C6C6, s, 10);
 				} else if (i == 3) {
 					putfonts8_asc_sht(sht_back, 0, 80, COL8_FFFFFF, COL8_008484, "3[sec]", 6);
+					count = 0; // 測定開始
 				} else {
 					if (i != 0) {
 						timer_init(timer3, &timerfifo, 0); // 次は0を
@@ -194,7 +195,7 @@ void make_window8(unsigned char *buf, int xsize, int ysize, char *title) {
 
 // x,y: 表示位置の座標 c: 文字色 b: 背景色 s: 文字列 l: 文字列長
 void putfonts8_asc_sht(struct SHEET *sht, int x, int y, int c, int b, char *s, int l) {
-	boxfill8(sht->buf, sht->bxsize, b, x, y, x + l * 8 -1, y + 15);
+	boxfill8(sht->buf, sht->bxsize, b, x, y, x + l * 8 - 1, y + 15);
 	putfont8_asc(sht->buf, sht->bxsize, x, y, c, s);
 	sheet_refresh(sht, x, y, x + l * 8, y + 16);
 	return;

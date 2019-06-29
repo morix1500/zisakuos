@@ -65,6 +65,7 @@ asm :
 run :
 	make img
 	qemu-system-i386 -fda haribote.img
+	#qemu -m 32 -localtime -std-vga -fda haribote.img
 
 clean :
 	rm -f *.bin
