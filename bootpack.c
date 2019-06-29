@@ -73,7 +73,6 @@ void HariMain(void) {
 
 	for (;;) {
 		count++;
-		sheet_slide(sht_mouse, mx, my); //これがないと動かない
 
 		io_cli();
 		if (fifo32_status(&fifo) == 0) {

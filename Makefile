@@ -64,7 +64,8 @@ asm :
 
 run :
 	make img
-	qemu-system-i386 -fda haribote.img
+	sudo qemu-system-i386 -m 32 -fda haribote.img -enable-kvm
+	#qemu-system-i386 -fda haribote.img
 	#qemu -m 32 -localtime -std-vga -fda haribote.img
 
 clean :
