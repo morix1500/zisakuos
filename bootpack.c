@@ -76,7 +76,7 @@ void HariMain(void) {
 	sheet_setbuf(sht_win, buf_win, 160, 52, -1); // 透明色なし
 	init_screen8(buf_back, binfo->scrnx, binfo->scrny);
 	init_mouse_cursor8(buf_mouse, 99);
-	make_window8(buf_win, 160, 52, "windows");
+	make_window8(buf_win, 160, 52, "window");
 	make_textbox8(sht_win, 8, 28, 144, 16, COL8_FFFFFF);
 	cursor_x = 8;
 	cursor_c = COL8_FFFFFF;
@@ -128,7 +128,7 @@ void HariMain(void) {
 			if (256 <= i && i <= 511) { // キーボードデータ
 				sprintf(s, "%02X", i - 256);
 				putfonts8_asc_sht(sht_back, 0, 16, COL8_FFFFFF, COL8_008484, s, 2);
-				if (i < 256 + 0x54) {
+				if (i < 0x54 + 256) {
 					if (keytable[i-256] != 0 && cursor_x < 144) { // 通常文字
 						// 1文字表示してからカーソルを１つすすめる
 						s[0] = keytable[i - 256];
@@ -272,5 +272,26 @@ void make_textbox8(struct SHEET *sht, int x0, int y0, int sx, int sy, int c) {
 }
 
 void task_b_main(void) {
-	for (;;) { io_hlt(); }
+	struct FIFO32 fifo;
+	struct TIMER *timer;
+	int i, fifobuf[128];
+
+	fifo32_init(&fifo, 128, fifobuf);
+	timer = timer_alloc();
+	timer_init(timer, &fifo, 100);
+	timer_settime(timer, 500);
+
+	for (;;) {
+		io_cli();
+		if (fifo32_status(&fifo) == 0) {
+			io_sti();
+			io_hlt();
+		} else {
+			i = fifo32_get(&fifo);
+			io_sti();
+			if (i == 100) { // 5秒タイムアウト
+				taskswitch3();
+			}
+		}
+	}
 }

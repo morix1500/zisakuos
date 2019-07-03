@@ -71,18 +71,14 @@ void timer_settime(struct TIMER *timer, unsigned int timeout) {
 	for (;;) {
 		s = t;
 		t = t->next;
-		if (t == 0) {
-			break; // いちばんうしろになった
-		}
 		if (timer->timeout <= t->timeout) {
 			// sとtの間に入れる場合
 			s->next = timer;     // sの次はtimer
-			timer->next = timer; // timerの次はt
+			timer->next = t; // timerの次はt
 			io_store_eflags(e);
 			return;
 		}
 	}
-	return;
 }
 
 void inthandler20(int *esp) {
