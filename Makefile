@@ -63,6 +63,7 @@ asm :
 	make -r ipl10.bin
 
 run :
+	make clean-all
 	make img
 	sudo qemu-system-i386 -m 32 -localtime -vga std -fda haribote.img -enable-kvm
 
