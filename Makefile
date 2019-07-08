@@ -45,6 +45,8 @@ haribote.sys : asmhead.bin bootpack.hrb Makefile
 haribote.img : ipl10.bin haribote.sys Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
+	mcopy ipl10.nas -i haribote.img ::
+	mcopy Makefile -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
