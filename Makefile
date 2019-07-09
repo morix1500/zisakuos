@@ -39,18 +39,18 @@ bootpack.bim : $(OBJS_BOOTPACK) Makefile
 bootpack.hrb : bootpack.bim Makefile
 	$(BIM2HRB) bootpack.bim bootpack.hrb 0
 
-hlt.hrb : hlt.nas Makefile
-	$(NASK) hlt.nas hlt.hrb hlt.lst
+hello.hrb : hello.nas Makefile
+	$(NASK) hello.nas hello.hrb hello.lst
 
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hlt.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
 	mcopy Makefile -i haribote.img ::
-	mcopy hlt.hrb -i haribote.img ::
+	mcopy hello.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
@@ -86,6 +86,7 @@ clean :
 	rm -f bootpack.hrb
 	rm -f haribote.sys
 	rm -f hlt.hrb
+	rm -f hello.hrb
 
 src-only :
 	make clean
