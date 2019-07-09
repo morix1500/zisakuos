@@ -1,5 +1,6 @@
 [BITS 32]
-	CLI
+	MOV	AL,'A'
+	CALL	0xbe5
 fin:
 	HTL
 	JMP fin

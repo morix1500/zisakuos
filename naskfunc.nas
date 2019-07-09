@@ -20,8 +20,10 @@
 	GLOBAL _asm_inthandler20
 	GLOBAL _memtest_sub
 	GLOBAL _farjmp
+	GLOBAL _asm_cons_putchar
 	EXTERN _inthandler21, _inthandler27, _inthandler2c
         EXTERN _inthandler20
+	EXTERN _cons_putchar
 
 ; 以下は実際の関数
 
@@ -214,4 +216,13 @@ mts_fin:
 
 _farjmp:    ; void farjmp(int eip, int cs);
 	JMP FAR [ESP+4]  ; eip, cs
+	RET
+
+_asm_cons_putchar:
+	PUSH	1
+	AND	EAX,0xff ; AHやEAXの上位を0にして、EAXにも文字コードが入った状態にする
+	PUSH	EAX
+	PUSH	DWORD [0x0fec] ; メモリの内容を読み込んでその値をPUSHする
+	CALL	_cons_putchar
+	ADD	ESP,12 ; スタックに積んだデータを捨てる
 	RET
