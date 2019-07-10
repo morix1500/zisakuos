@@ -45,16 +45,30 @@ hello.hrb : hello.nas Makefile
 hello2.hrb : hello2.nas Makefile
 	$(NASK) hello2.nas hello2.hrb hello2.lst
 
+a.bim : a.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:a.bim map:a.map a.obj a_nask.obj
+
+a.hrb : a.bim Makefile
+	$(BIM2HRB) a.bim a.hrb 0
+
+hello3.bim : hello3.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:hello3.bim map:hello3.map hello3.obj a_nask.obj
+
+hello3.hrb : hello3.bim Makefile
+	$(BIM2HRB) hello3.bim hello3.hrb 0
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
 	mcopy Makefile -i haribote.img ::
 	mcopy hello.hrb -i haribote.img ::
 	mcopy hello2.hrb -i haribote.img ::
+	mcopy a.hrb -i haribote.img ::
+	mcopy hello3.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
@@ -82,12 +96,12 @@ clean :
 	rm -f *.lst
 	rm -f *.gas
 	rm -f *.obj
+	rm -f *.bim
+	rm -f *.map
+	rm -f *.hrb
 	rm -f bootpack.nas
 	rm -f graphic.nas
 	rm -f dsctbl.nas
-	rm -f bootpack.map
-	rm -f bootpack.bim
-	rm -f bootpack.hrb
 	rm -f haribote.sys
 	rm -f hlt.hrb
 	rm -f hello.hrb
