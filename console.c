@@ -228,8 +228,6 @@ void cmd_cat(struct CONSOLE *cons, int *fat, char *cmdline) {
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
 	struct FILEINFO *finfo = file_search(cmdline + 4, (struct FILEINFO *) (ADR_DISKIMG + 0x002600), 224);
 	char *p;
-	int i;
-
 	if (finfo != 0) {
 		// ファイルが見つかった場合
 		p = (char *) memman_alloc_4k(memman, finfo->size);
