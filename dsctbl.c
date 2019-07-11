@@ -17,7 +17,7 @@ void init_gdtidt(void) {
 	load_gdtr(LIMIT_GDT, ADR_GDT);
 
 	// IDTの初期化
-	for (i = 0; i < LIMIT_IDT / 8; i++) {
+	for (i = 0; i <= LIMIT_IDT / 8; i++) {
 		set_gatedesc(idt + i, 0, 0, 0);
 	}
 	load_idtr(LIMIT_IDT, ADR_IDT);
@@ -29,7 +29,7 @@ void init_gdtidt(void) {
 	set_gatedesc(idt + 0x21, (int) asm_inthandler21, 2 << 3, AR_INTGATE32);
 	set_gatedesc(idt + 0x27, (int) asm_inthandler27, 2 << 3, AR_INTGATE32);
 	set_gatedesc(idt + 0x2c, (int) asm_inthandler2c, 2 << 3, AR_INTGATE32);
-	set_gatedesc(idt + 0x40, (int) asm_hrb_api     , 2 << 3, AR_INTGATE32);
+	set_gatedesc(idt + 0x40, (int) asm_hrb_api     , 2 << 3, AR_INTGATE32 + 0x60);
 
 	return;
 }
