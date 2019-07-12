@@ -66,10 +66,13 @@ crack1.hrb : crack1.bim Makefile
 crack2.hrb : crack2.nas Makefile
 	$(NASK) crack2.nas crack2.hrb crack2.lst
 
+crack3.hrb : crack3.nas Makefile
+	$(NASK) crack3.nas crack3.hrb crack3.lst
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crack1.hrb crack2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crack1.hrb crack2.hrb crack3.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -80,6 +83,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crac
 	mcopy hello3.hrb -i haribote.img ::
 	mcopy crack1.hrb -i haribote.img ::
 	mcopy crack2.hrb -i haribote.img ::
+	mcopy crack3.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
