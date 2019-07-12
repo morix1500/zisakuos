@@ -23,7 +23,7 @@
 	GLOBAL _farjmp, _farcall
 	GLOBAL _asm_hrb_api, _start_app
 	EXTERN _inthandler21, _inthandler27, _inthandler2c
-        EXTERN _inthandler20, _inthandler0d
+        EXTERN _inthandler20, _inthandler0d, _inthandler0c
 	EXTERN _hrb_api
 
 ; 以下は実際の関数
@@ -180,6 +180,26 @@ _asm_inthandler2c:
 	POPAD
 	POP     DS
 	POP     ES
+	IRETD
+
+_asm_inthandler0c:
+	STI
+	PUSH	ES
+	PUSH	DS
+	PUSHAD
+	MOV	EAX,ESP
+	PUSH	EAX
+	MOV	AX,SS
+	MOV	DS,AX
+	MOV	ES,AX
+	CALL	_inthandler0c
+	CMP	EAX,0
+	JNE	end_app
+	POP	EAX
+	POPAD
+	POP	DS
+	POP	ES
+	ADD	ESP,4	; INT 0x0cでもこれが必要
 	IRETD
 
 _asm_inthandler0d:

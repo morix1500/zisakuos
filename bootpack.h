@@ -24,6 +24,7 @@ void load_idtr(int limit, int addr);
 int  load_cr0(void);
 void load_tr(int tr);
 void store_cr0(int cr0);
+void asm_inthandler0c(void);
 void asm_inthandler0d(void);
 void asm_inthandler20(void);
 void asm_inthandler21(void);
@@ -256,6 +257,7 @@ void cmd_cat(struct CONSOLE *cons, int *fat, char *cmdline);
 void cmd_hlt(struct CONSOLE *cons, int *fat);
 int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline);
 int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax);
+int *inthandler0c(int *esp);
 int *inthandler0d(int *esp);
 
 // file.c

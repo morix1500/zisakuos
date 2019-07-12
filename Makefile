@@ -69,10 +69,16 @@ crack2.hrb : crack2.nas Makefile
 crack3.hrb : crack3.nas Makefile
 	$(NASK) crack3.nas crack3.hrb crack3.lst
 
+bug1.bim : bug1.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:bug1.bim map:bug1.map bug1.obj a_nask.obj
+
+bug1.hrb : bug1.bim Makefile
+	$(BIM2HRB) bug1.bim bug1.hrb 0
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crack1.hrb crack2.hrb crack3.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crack1.hrb crack2.hrb crack3.hrb bug1.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -84,6 +90,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crac
 	mcopy crack1.hrb -i haribote.img ::
 	mcopy crack2.hrb -i haribote.img ::
 	mcopy crack3.hrb -i haribote.img ::
+	mcopy bug1.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
