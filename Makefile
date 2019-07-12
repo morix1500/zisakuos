@@ -56,6 +56,12 @@ hello3.bim : hello3.obj a_nask.obj Makefile
 
 hello3.hrb : hello3.bim Makefile
 	$(BIM2HRB) hello3.bim hello3.hrb 0
+
+hello4.bim : hello4.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:hello4.bim map:hello4.map hello4.obj a_nask.obj
+
+hello4.hrb : hello4.bim Makefile
+	$(BIM2HRB) hello4.bim hello4.hrb 0
 	
 crack1.bim : crack1.obj a_nask.obj Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:crack1.bim map:crack1.map crack1.obj a_nask.obj
@@ -84,7 +90,7 @@ bug2.hrb : bug2.bim Makefile
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crack1.hrb crack2.hrb crack3.hrb bug1.hrb bug2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb crack1.hrb crack2.hrb crack3.hrb bug1.hrb bug2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -93,6 +99,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb crac
 	mcopy hello2.hrb -i haribote.img ::
 	mcopy a.hrb -i haribote.img ::
 	mcopy hello3.hrb -i haribote.img ::
+	mcopy hello4.hrb -i haribote.img ::
 	mcopy crack1.hrb -i haribote.img ::
 	mcopy crack2.hrb -i haribote.img ::
 	mcopy crack3.hrb -i haribote.img ::
