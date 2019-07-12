@@ -16,14 +16,15 @@
 	GLOBAL _load_gdtr, _load_idtr
         GLOBAL _load_cr0, _store_cr0
 	GLOBAL _load_tr
-	GLOBAL _asm_inthandler21, _asm_inthandler27, _asm_inthandler2c
-	GLOBAL _asm_inthandler20
-	GLOBAL _asm_inthandler0d
+	GLOBAL _asm_inthandler20, _asm_inthandler21
+	GLOBAL _asm_inthandler27, _asm_inthandler2c
+	GLOBAL _asm_inthandler0c, _asm_inthandler0d
 	GLOBAL _asm_end_app, _memtest_sub
 	GLOBAL _farjmp, _farcall
 	GLOBAL _asm_hrb_api, _start_app
-	EXTERN _inthandler21, _inthandler27, _inthandler2c
-        EXTERN _inthandler20, _inthandler0d, _inthandler0c
+	EXTERN _inthandler20, _inthandler21
+        EXTERN _inthandler27, _inthandler2c
+        EXTERN _inthandler0c, _inthandler0d
 	EXTERN _hrb_api
 
 ; 以下は実際の関数
@@ -47,19 +48,19 @@ _io_stihlt:  ; void io_stihlt(void);
 	HLT
 	RET
 
-_io_in8:   ; void io_in8(int port);
+_io_in8:   ; int io_in8(int port);
 	MOV EDX,[ESP+4] ; port
 	MOV EAX,0
 	IN  AL,DX
 	RET
 
-_io_in16:   ; void io_in16(int port);
+_io_in16:   ; int io_in16(int port);
 	MOV EDX,[ESP+4] ; port
 	MOV EAX,0
 	IN  AX,DX
 	RET
 
-_io_in32:   ; void io_in32(int port);
+_io_in32:   ; int io_in32(int port);
 	MOV EDX,[ESP+4] ; port
 	IN  EAX,DX
 	RET

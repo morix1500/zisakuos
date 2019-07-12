@@ -145,7 +145,6 @@ struct MEMMAN {
 	int frees, maxfrees, lostsize, losts;
 	struct FREEINFO free[MEMMAN_FREES];
 };
-
 unsigned int memtest(unsigned int start, unsigned int end);
 void memman_init(struct MEMMAN *man);
 unsigned int memman_total(struct MEMMAN *man);
@@ -218,7 +217,7 @@ struct TASK {
 struct TASKLEVEL {
 	int running; // 動作しているタスクの数
 	int now;     // 現在動作しているタスクがどれだかわかるようにするための変数
-	struct TASK *tasks[MAX_TASKS];
+	struct TASK *tasks[MAX_TASKS_LV];
 };
 struct TASKCTL {
 	int now_lv; // 現在動作中のレベル
@@ -258,8 +257,8 @@ void cmd_cat(struct CONSOLE *cons, int *fat, char *cmdline);
 void cmd_hlt(struct CONSOLE *cons, int *fat);
 int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline);
 int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax);
-int *inthandler0c(int *esp);
 int *inthandler0d(int *esp);
+int *inthandler0c(int *esp);
 
 // file.c
 struct FILEINFO {

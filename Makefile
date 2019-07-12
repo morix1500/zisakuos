@@ -68,6 +68,12 @@ winhelo.bim : winhelo.obj a_nask.obj Makefile
 
 winhelo.hrb : winhelo.bim Makefile
 	$(BIM2HRB) winhelo.bim winhelo.hrb 0
+
+winhelo2.bim : winhelo2.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:winhelo2.bim stack:1k map:winhelo2.map winhelo2.obj a_nask.obj
+
+winhelo2.hrb : winhelo2.bim Makefile
+	$(BIM2HRB) winhelo2.bim winhelo2.hrb 0
 	
 crack1.bim : crack1.obj a_nask.obj Makefile
 	$(OBJ2BIM) @$(RULEFILE) out:crack1.bim map:crack1.map crack1.obj a_nask.obj
@@ -96,7 +102,7 @@ bug2.hrb : bug2.bim Makefile
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb crack1.hrb crack2.hrb crack3.hrb bug1.hrb bug2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb winhelo2.hrb crack1.hrb crack2.hrb crack3.hrb bug1.hrb bug2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -107,6 +113,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 	mcopy hello3.hrb -i haribote.img ::
 	mcopy hello4.hrb -i haribote.img ::
 	mcopy winhelo.hrb -i haribote.img ::
+	mcopy winhelo2.hrb -i haribote.img ::
 	mcopy crack1.hrb -i haribote.img ::
 	mcopy crack2.hrb -i haribote.img ::
 	mcopy crack3.hrb -i haribote.img ::
