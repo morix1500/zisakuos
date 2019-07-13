@@ -327,13 +327,17 @@ int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int 
 		sheet_updown(sht, 3); // 3という高さはtask_aの上
 		reg[7] = (int) sht;
 	} else if (edx == 6) {
-		sht = (struct SHEET *) ebx;
+		sht = (struct SHEET *) (ebx & 0xfffffffe);
 		putfont8_asc(sht->buf, sht->bxsize, esi, edi, eax, (char *) ebp + ds_base);
-		sheet_refresh(sht, esi, edi, esi + ecx * 8, edi + 16);
+		if ((ebx & 1) == 0) {
+			sheet_refresh(sht, esi, edi, esi + ecx * 8, edi + 16);
+		}
 	} else if (edx == 7) {
-		sht = (struct SHEET *) ebx;
+		sht = (struct SHEET *) (ebx & 0xfffffffe);
 		boxfill8(sht->buf, sht->bxsize, ebp, eax, ecx, esi, edi);
-		sheet_refresh(sht, eax, ecx, esi + 1, edi + 1);
+		if ((ebx & 1) == 0) {
+			sheet_refresh(sht, eax, ecx, esi + 1, edi + 1);
+		}
 	} else if (edx == 8) {
 		memman_init((struct MEMMAN *) (ebx + ds_base));
 		ecx &= 0xfffffff0; // 16バイト単位に
@@ -345,9 +349,14 @@ int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int 
 		ecx = (ecx + 0x0f) & 0xfffffff0; // 16バイト単位に切り上げ
 		memman_free((struct MEMMAN *) (ebx + ds_base), eax, ecx);
 	} else if (edx == 11) {
-		sht = (struct SHEET *) ebx;
+		sht = (struct SHEET *) (ebx & 0xfffffffe);
 		sht->buf[sht->bxsize * edi + esi] = eax;
-		sheet_refresh(sht, esi, edi, esi + 1, edi + 1);
+		if ((ebx & 1) == 0) {
+			sheet_refresh(sht, esi, edi, esi + 1, edi + 1);
+		}
+	} else if (edx == 12) {
+		sht = (struct SHEET *) ebx;
+		sheet_refresh(sht, eax, ecx, esi, edi);
 	}
 	return 0;
 }
@@ -356,7 +365,7 @@ int *inthandler0c(int *esp) {
 	struct CONSOLE *cons = (struct CONSOLE *) *((int *) 0x0fec);
 	struct TASK *task = task_now();
 	char s[30];
-	cons_putstr0(cons, "\nINT 0c :\n Stack Exception.\n");
+	cons_putstr0(cons, "\nINT 0C :\n Stack Exception.\n");
 	sprintf(s, "EIP = %08X\n", esp[11]);
 	cons_putstr0(cons, s);
 	return &(task->tss.esp0); // 異常終了させる
