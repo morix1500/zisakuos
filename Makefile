@@ -104,11 +104,17 @@ lines.bim : lines.obj a_nask.obj Makefile
 	
 lines.hrb : lines.bim Makefile
 	$(BIM2HRB) lines.bim lines.hrb 47k
+
+walk.bim : walk.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:walk.bim stack:1k map:walk.map walk.obj a_nask.obj
+	
+walk.hrb : walk.bim Makefile
+	$(BIM2HRB) walk.bim walk.hrb 47k
 	
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb winhelo2.hrb winhelo3.hrb star1.hrb stars.hrb stars2.hrb lines.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb winhelo2.hrb winhelo3.hrb star1.hrb stars.hrb stars2.hrb lines.hrb walk.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -125,6 +131,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 	mcopy stars.hrb -i haribote.img ::
 	mcopy stars2.hrb -i haribote.img ::
 	mcopy lines.hrb -i haribote.img ::
+	mcopy walk.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
