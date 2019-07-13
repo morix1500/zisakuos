@@ -74,11 +74,17 @@ winhelo2.bim : winhelo2.obj a_nask.obj Makefile
 
 winhelo2.hrb : winhelo2.bim Makefile
 	$(BIM2HRB) winhelo2.bim winhelo2.hrb 0
+
+winhelo3.bim : winhelo3.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:winhelo3.bim stack:1k map:winhelo3.map winhelo3.obj a_nask.obj
+
+winhelo3.hrb : winhelo3.bim Makefile
+	$(BIM2HRB) winhelo3.bim winhelo3.hrb 40k
 	
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb winhelo2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb winhelo2.hrb winhelo3.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -90,6 +96,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 	mcopy hello4.hrb -i haribote.img ::
 	mcopy winhelo.hrb -i haribote.img ::
 	mcopy winhelo2.hrb -i haribote.img ::
+	mcopy winhelo3.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
