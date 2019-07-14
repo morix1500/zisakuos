@@ -128,13 +128,19 @@ color.bim : color.obj a_nask.obj Makefile
 	
 color.hrb : color.bim Makefile
 	$(BIM2HRB) color.bim color.hrb 56k
+
+color2.bim : color2.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:color2.bim stack:1k map:color2.map color2.obj a_nask.obj
+	
+color2.hrb : color2.bim Makefile
+	$(BIM2HRB) color2.bim color2.hrb 56k
 	
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
 haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb \
 	winhelo.hrb winhelo2.hrb winhelo3.hrb star1.hrb stars.hrb stars2.hrb \
-	lines.hrb walk.hrb noodle.hrb beepdown.hrb color.hrb \
+	lines.hrb walk.hrb noodle.hrb beepdown.hrb color.hrb color2.hrb \
 	Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
@@ -156,6 +162,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 	mcopy noodle.hrb -i haribote.img ::
 	mcopy beepdown.hrb -i haribote.img ::
 	mcopy color.hrb -i haribote.img ::
+	mcopy color2.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
