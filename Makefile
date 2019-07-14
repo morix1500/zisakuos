@@ -122,11 +122,20 @@ beepdown.bim : beepdown.obj a_nask.obj Makefile
 	
 beepdown.hrb : beepdown.bim Makefile
 	$(BIM2HRB) beepdown.bim beepdown.hrb 47k
+
+color.bim : color.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:color.bim stack:1k map:color.map color.obj a_nask.obj
+	
+color.hrb : color.bim Makefile
+	$(BIM2HRB) color.bim color.hrb 56k
 	
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb winhelo.hrb winhelo2.hrb winhelo3.hrb star1.hrb stars.hrb stars2.hrb lines.hrb walk.hrb noodle.hrb beepdown.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb \
+	winhelo.hrb winhelo2.hrb winhelo3.hrb star1.hrb stars.hrb stars2.hrb \
+	lines.hrb walk.hrb noodle.hrb beepdown.hrb color.hrb \
+	Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
 	mcopy ipl10.nas -i haribote.img ::
@@ -146,6 +155,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 	mcopy walk.hrb -i haribote.img ::
 	mcopy noodle.hrb -i haribote.img ::
 	mcopy beepdown.hrb -i haribote.img ::
+	mcopy color.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
@@ -156,6 +166,12 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 
 %.obj : %.nas Makefile
 	$(NASK) $*.nas $*.obj $*.lst
+
+app_%.bim : app_%.obj a_nask.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:app_$*.bim stack:1k map:app_$*.map app_$*.obj a_nask.obj
+	
+app_%.hrb : app_%.bim Makefile
+	$(BIM2HRB) app_$*.bim app_$*.hrb 47k
 
 img :
 	make -r haribote.img
