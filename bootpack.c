@@ -12,7 +12,7 @@ void HariMain(void) {
 	char s[40];
 	struct FIFO32 fifo, keycmd;
 	int fifobuf[128], keycmd_buf[32], *cons_fifo[2];
-	int mx, my, i;
+	int mx, my, i, new_mx = -1, new_my = 0, new_wx = 0x7fffffff, new_wy = 0;
 	unsigned int memtotal;
 	struct MOUSE_DEC mdec;
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
@@ -128,8 +128,19 @@ void HariMain(void) {
 		}
 		io_cli();
 		if (fifo32_status(&fifo) == 0) {
-			task_sleep(task_a);
-			io_sti();
+			// FIFOがからっぽになったので、保留している描画があれば実行する
+			if (new_mx >= 0) {
+				io_sti();
+				sheet_slide(sht_mouse, new_mx, new_my);
+				new_mx = -1;
+			} else if (new_wx != 0x7fffffff) {
+				io_sti();
+				sheet_slide(sht, new_wx, new_wy);
+				new_wx = 0x7fffffff;
+			} else {
+				task_sleep(task_a);
+				io_sti();
+			}
 		} else {
 			i = fifo32_get(&fifo);
 			io_sti();
@@ -225,7 +236,8 @@ void HariMain(void) {
 					if (my > binfo->scrny - 1) {
 						my = binfo->scrny - 1;
 					}
-					sheet_slide(sht_mouse, mx, my);
+					new_mx = mx;
+					new_my = my;
 					if ((mdec.btn & 0x01) != 0) {
 						// 左ボタンを押している
 						if (mmx < 0) {
@@ -248,6 +260,7 @@ void HariMain(void) {
 											mmx = mx;
 											mmy = my;
 											mmx2 = sht->vx0;
+											new_wy = sht->vy0;
 										}
 										if (sht->bxsize - 21 <= x && x < sht->bxsize - 5 && 5 <= y && y < 19) {
 											// xボタンクリック
@@ -268,12 +281,17 @@ void HariMain(void) {
 							// ウィンドウ移動モードの場合
 							x = mx - mmx; // マウスの移動量を計算
 							y = my - mmy;
-							sheet_slide(sht, (mmx2 + x + 2) & ~3, sht->vy0 + y);
+							new_wx = (mmx2 + x + 2) & ~3;
+							new_wy = new_wy + y;
 							mmy = my; // 移動後の座標に更新
 						}
 					} else {
 						// 左ボタンを押していない
 						mmx = -1; // 通常モードへ
+						if (new_wx != 0x7fffffff) {
+							sheet_slide(sht, new_wx, new_wy); // 一度確定させる
+							new_wx = 0x7fffffff;
+						}
 					}
 				}
 			}
