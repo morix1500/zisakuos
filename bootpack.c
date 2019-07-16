@@ -6,6 +6,8 @@
 void keywin_off(struct SHEET *key_win);
 void keywin_on(struct SHEET *key_win);
 struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal);
+void close_console(struct SHEET *sht);
+void close_constask(struct TASK *task);
 
 void HariMain(void) {
 	struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
@@ -48,6 +50,7 @@ void HariMain(void) {
 	init_pic();
 	io_sti(); //STI命令を実行(割り込み許可フラグが1になる)
 	fifo32_init(&fifo, 128, fifobuf, 0);
+	*((int *) 0x0fec) = (int) &fifo;
 	init_pit();
 	init_keyboard(&fifo, 256);
 	enable_mouse(&fifo, 512, &mdec);
@@ -120,9 +123,13 @@ void HariMain(void) {
 		} else {
 			i = fifo32_get(&fifo);
 			io_sti();
-			if (key_win->flags == 0) {
-				key_win = shtctl->sheets[shtctl->top - 1];
-				keywin_on(key_win);
+			if (key_win != 0 && key_win->flags == 0) { // ウィンドウが閉じられた
+				if (shtctl->top == 1) { // もうマウスと背景しかない
+					key_win = 0;
+				} else {
+					key_win = shtctl->sheets[shtctl->top - 1];
+					keywin_on(key_win);
+				}
 			}
 			if (256 <= i && i <= 511) { // キーボードデータ
 				if (i < 0x80 + 256) { // キーコードを文字コードに変換
@@ -179,7 +186,7 @@ void HariMain(void) {
 					fifo32_put(&keycmd, KEYCMD_LED);
 					fifo32_put(&keycmd, key_leds);
 				}
-				if (i == 256 + 0x3b && key_shift != 0) { // Shift + F1
+				if (i == 256 + 0x3b && key_shift != 0 && key_win != 0) { // Shift + F1
 					task = key_win->task;
 					if (task != 0 && task->tss.ss0 != 0) {
 						cons_putstr0(task->cons, "\nBreak(key): \n");
@@ -191,7 +198,9 @@ void HariMain(void) {
 				}
 				if (i == 256 + 0x3c && key_shift != 0) { // Shift + F2
 					// 新しく作ったコンソールを入力選択状態にする(そのほうが親切?)
-					keywin_off(key_win);
+					if (key_win != 0) {
+						keywin_off(key_win);
+					}
 					key_win = open_console(shtctl, memtotal);
 					sheet_slide(key_win, 32, 4);
 					sheet_updown(key_win, shtctl->top);
@@ -278,6 +287,8 @@ void HariMain(void) {
 						}
 					}
 				}
+			} else if (768 <= i && i <= 1023) { // コンソール終了処理
+				close_console(shtctl->sheets0 + (i - 768));
 			}
 		}
 	}
@@ -308,7 +319,8 @@ struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal) {
 	sheet_setbuf(sht, buf, 256, 165, -1); // 透明色なし
 	make_window8(buf, 256, 165, "console", 0);
 	make_textbox8(sht, 8, 28, 240, 128, COL8_000000);
-	task->tss.esp = memman_alloc_4k(memman, 64 * 1024) + 64 * 1024 - 12;
+	task->cons_stack = memman_alloc_4k(memman, 64 * 1024);
+	task->tss.esp = task->cons_stack + 64 * 1024 - 12;
 	task->tss.eip = (int) &console_task;
 	task->tss.es = 1 * 8;
 	task->tss.cs = 2 * 8;
@@ -323,4 +335,24 @@ struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal) {
 	sht->flags |= 0x20; // カーソルあり
 	fifo32_init(&task->fifo, 128, cons_fifo, task);
 	return sht;
+}
+
+void close_constask(struct TASK *task) {
+
+	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+	task_sleep(task);
+	memman_free_4k(memman, task->cons_stack, 64 * 1024);
+	memman_free_4k(memman, (int) task->fifo.buf, 128 * 4);
+	task->flags = 0; // task_free(task); の代わり
+	return;
+}
+
+void close_console(struct SHEET *sht) {
+
+	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+	struct TASK *task = sht->task;
+	memman_free_4k(memman, (int) sht->buf, 256 * 165);
+	sheet_free(sht);
+	close_constask(task);
+	return;
 }
