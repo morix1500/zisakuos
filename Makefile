@@ -87,6 +87,7 @@ clean_full :
 	$(MAKE) -C beepdown		clean
 	$(MAKE) -C color		clean
 	$(MAKE) -C color2		clean
+	rm -f haribote.img
 
 src_only_full :
 	$(MAKE) -C haribote		src_only

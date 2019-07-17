@@ -56,7 +56,8 @@ haribote.sys : asmhead.bin bootpack.hrb Makefile
 	$(NASK) $*.nas $*.obj $*.lst
 
 clean :
-	rm -f *.bin
+	rm -f asmhead.bin
+	rm -f hankaku.bin
 	rm -f *.lst
 	rm -f *.gas
 	rm -f *.obj
@@ -66,7 +67,7 @@ clean :
 	rm -f bootpack.nas
 	rm -f graphic.nas
 	rm -f dsctbl.nas
-	rm -f haribote.sys
+	#rm -f haribote.sys
 	rm -f hlt.hrb
 
 src-only :

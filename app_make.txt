@@ -1,7 +1,7 @@
 TOOLPATH = ../z_tools/
 INCPATH  = ../z_tools/haribote/
-APILIBPATH = apilib/
-HARIBOTEPATH = haribote/
+APILIBPATH = ../apilib/
+HARIBOTEPATH = ../haribote/
 
 MAKE = make -r
 NASK = $(TOOLPATH)nask.exe
