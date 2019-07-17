@@ -284,3 +284,7 @@ struct FILEINFO {
 void file_readfat(int *fat, unsigned char *img);
 void file_loadfile(int clustno, int size, char *buf, int *fat, char *img);
 struct FILEINFO *file_search(char *name, struct FILEINFO *finfo, int max);
+
+/* bootpack.c */
+struct TASK *open_constask(struct SHEET *sht, unsigned int memtotal);
+struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal);
