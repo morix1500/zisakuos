@@ -138,9 +138,16 @@ color2.hrb : color2.bim Makefile
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
+crack7.bim : crack7.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:crack7.bim stack:1k map:crack7.map crack7.obj
+
+crack7.hrb : crack7.bim Makefile
+	$(BIM2HRB) crack7.bim crack7.hrb 0k
+
 haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hello4.hrb \
 	winhelo.hrb winhelo2.hrb winhelo3.hrb star1.hrb stars.hrb stars2.hrb \
 	lines.hrb walk.hrb noodle.hrb beepdown.hrb color.hrb color2.hrb \
+	crack7.hrb \
 	Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy haribote.sys -i haribote.img ::
@@ -163,6 +170,7 @@ haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb a.hrb hello3.hrb hell
 	mcopy beepdown.hrb -i haribote.img ::
 	mcopy color.hrb -i haribote.img ::
 	mcopy color2.hrb -i haribote.img ::
+	mcopy crack7.hrb -i haribote.img ::
 
 # 一般規則
 %.gas : %.c Makefile
