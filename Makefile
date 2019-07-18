@@ -14,7 +14,7 @@ haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
 	lines/lines.hrb walk/walk.hrb noodle/noodle.hrb \
 	beepdown/beepdown.hrb color/color.hrb color2/color2.hrb \
 	sosu/sosu.hrb sosu2/sosu2.hrb sosu3/sosu3.hrb \
-	typeipl/typeipl.hrb ls/ls.hrb
+	typeipl/typeipl.hrb ls/ls.hrb iroha/iroha.hrb
 	mformat -f 1440 -C -B haribote/ipl10.bin -i haribote.img ::
 	mcopy haribote/haribote.sys -i haribote.img ::
 	mcopy haribote/ipl10.nas -i haribote.img ::
@@ -38,6 +38,8 @@ haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
 	mcopy sosu3/sosu3.hrb -i haribote.img ::
 	mcopy typeipl/typeipl.hrb -i haribote.img ::
 	mcopy ls/ls.hrb -i haribote.img ::
+	mcopy iroha/iroha.hrb -i haribote.img ::
+	mcopy nihongo/nihongo.fnt -i haribote.img ::
 
 run :
 	make haribote.img
@@ -66,6 +68,7 @@ full :
 	make -C sosu3
 	make -C typeipl
 	make -C ls
+	make -C iroha
 	make haribote.img
 
 run_full :
@@ -104,6 +107,7 @@ clean_full :
 	$(MAKE) -C sosu3                clean
 	$(MAKE) -C typeipl              clean
 	$(MAKE) -C ls                   clean
+	$(MAKE) -C iroha                clean
 	rm -f haribote.img
 
 src_only_full :
@@ -129,6 +133,7 @@ src_only_full :
 	$(MAKE) -C sosu3                src_only
 	$(MAKE) -C typeipl              src_only
 	$(MAKE) -C ls                   src_only
+	$(MAKE) -C iroha                src_only
 	-$(DEL) haribote.img
 
 refresh :
