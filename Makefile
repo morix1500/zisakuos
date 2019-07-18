@@ -12,7 +12,8 @@ haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
 	winhelo/winhelo.hrb winhelo2/winhelo2.hrb winhelo3/winhelo3.hrb \
 	star1/star1.hrb stars/stars.hrb stars2/stars2.hrb \
 	lines/lines.hrb walk/walk.hrb noodle/noodle.hrb \
-	beepdown/beepdown.hrb color/color.hrb color2/color2.hrb
+	beepdown/beepdown.hrb color/color.hrb color2/color2.hrb \
+	sosu/sosu.hrb sosu2/sosu2.hrb sosu3/sosu3.hrb
 	mformat -f 1440 -C -B haribote/ipl10.bin -i haribote.img ::
 	mcopy haribote/haribote.sys -i haribote.img ::
 	mcopy haribote/ipl10.nas -i haribote.img ::
@@ -31,6 +32,9 @@ haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
 	mcopy beepdown/beepdown.hrb -i haribote.img ::
 	mcopy color/color.hrb -i haribote.img ::
 	mcopy color2/color2.hrb -i haribote.img ::
+	mcopy sosu/sosu.hrb -i haribote.img ::
+	mcopy sosu2/sosu2.hrb -i haribote.img ::
+	mcopy sosu3/sosu3.hrb -i haribote.img ::
 
 run :
 	make haribote.img
@@ -54,6 +58,9 @@ full :
 	make -C beepdown
 	make -C color
 	make -C color2
+	make -C sosu
+	make -C sosu2
+	make -C sosu3
 	make haribote.img
 
 run_full :
@@ -87,6 +94,9 @@ clean_full :
 	$(MAKE) -C beepdown		clean
 	$(MAKE) -C color		clean
 	$(MAKE) -C color2		clean
+	$(MAKE) -C sosu                 clean
+	$(MAKE) -C sosu2                clean
+	$(MAKE) -C sosu3                clean
 	rm -f haribote.img
 
 src_only_full :
@@ -107,6 +117,9 @@ src_only_full :
 	$(MAKE) -C beepdown		src_only
 	$(MAKE) -C color		src_only
 	$(MAKE) -C color2		src_only
+	$(MAKE) -C sosu                 src_only
+	$(MAKE) -C sosu2                src_only
+	$(MAKE) -C sosu3                src_only
 	-$(DEL) haribote.img
 
 refresh :
