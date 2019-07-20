@@ -15,7 +15,7 @@ haribote.img : haribote/ipl20.bin haribote/haribote.sys Makefile \
 	beepdown/beepdown.hrb color/color.hrb color2/color2.hrb \
 	sosu/sosu.hrb sosu2/sosu2.hrb sosu3/sosu3.hrb \
 	typeipl/typeipl.hrb cat/cat.hrb iroha/iroha.hrb \
-	chklang/chklang.hrb notrec/notrec.hrb
+	chklang/chklang.hrb notrec/notrec.hrb bball/bball.hrb
 	mformat -f 1440 -C -B haribote/ipl20.bin -i haribote.img ::
 	mcopy haribote/haribote.sys -i haribote.img ::
 	mcopy haribote/ipl10.nas -i haribote.img ::
@@ -43,6 +43,7 @@ haribote.img : haribote/ipl20.bin haribote/haribote.sys Makefile \
 	mcopy iroha/iroha.hrb -i haribote.img ::
 	mcopy chklang/chklang.hrb -i haribote.img ::
 	mcopy notrec/notrec.hrb -i haribote.img ::
+	mcopy bball/bball.hrb -i haribote.img ::
 	mcopy nihongo/nihongo.fnt -i haribote.img ::
 	mcopy test.txt -i haribote.img ::
 
@@ -76,6 +77,7 @@ full :
 	make -C iroha
 	make -C chklang
 	make -C notrec
+	make -C bball
 	make haribote.img
 
 run_full :
@@ -117,6 +119,7 @@ clean_full :
 	$(MAKE) -C iroha                clean
 	$(MAKE) -C chklang              clean
 	$(MAKE) -C notrec               clean
+	$(MAKE) -C bball                clean
 	rm -f haribote.img
 
 src_only_full :
@@ -145,6 +148,7 @@ src_only_full :
 	$(MAKE) -C iroha                src_only
 	$(MAKE) -C chklang              src_only
 	$(MAKE) -C notrec               src_only
+	$(MAKE) -C bball                src_only
 	-$(DEL) haribote.img
 
 refresh :
