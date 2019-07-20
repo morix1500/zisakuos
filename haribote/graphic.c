@@ -157,6 +157,7 @@ void putfont8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s)
 				putfont8(vram, xsize, x - 8, y, c, font);       // 左半分
 				putfont8(vram, xsize, x    , y, c, font +  16); // 右半分
 			}
+			x += 8;
 		}
 	}
 	return;
