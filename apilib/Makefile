@@ -8,15 +8,15 @@ OBJS_API =	api001.obj api002.obj api003.obj api004.obj api005.obj api006.obj \
 TOOLPATH = ../z_tools/
 INCPATH  = ../z_tools/haribote/
 
-NASK = $(TOOLPATH)nask.exe
-CC1  = $(TOOLPATH)cc1.exe -I$(INCPATH) -Os -Wall -quiet
-GAS2NASK = $(TOOLPATH)gas2nask.exe -a
+NASK = $(TOOLPATH)nask
+CC1  = $(TOOLPATH)gocc1 -I$(INCPATH) -Os -Wall -quiet
+GAS2NASK = $(TOOLPATH)gas2nask -a
 RULEFILE = $(TOOLPATH)haribote/haribote.rul
-OBJ2BIM  = $(TOOLPATH)obj2bim.exe
-BIM2HRB  = $(TOOLPATH)bim2hrb.exe
-BIN2OBJ  = $(TOOLPATH)bin2obj.exe
-MAKEFONT = $(TOOLPATH)makefont.exe
-GOLIB    = $(TOOLPATH)golib00.exe
+OBJ2BIM  = $(TOOLPATH)obj2bim
+BIM2HRB  = $(TOOLPATH)bim2hrb
+BIN2OBJ  = $(TOOLPATH)bin2obj
+MAKEFONT = $(TOOLPATH)makefont
+GOLIB    = $(TOOLPATH)golib00
 
 # デフォルト動作
 default :
