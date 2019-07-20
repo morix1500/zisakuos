@@ -1,4 +1,4 @@
-APP = ls
+APP = cat
 STACK = 1k
 MALLOC = 0k
 
