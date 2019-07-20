@@ -26,9 +26,9 @@ $(APP).bim : $(APP).obj $(APILIBPATH)apilib.lib Makefile ../app_make.txt
 $(APP).hrb : $(APP).bim Makefile ../app_make.txt
 	$(BIM2HRB) $(APP).bim $(APP).hrb $(MALLOC)
 
-haribote.img : ../haribote/ipl10.bin ../haribote/haribote.sys $(APP).hrb \
+haribote.img : ../haribote/ipl20.bin ../haribote/haribote.sys $(APP).hrb \
 	Makefile ../app_make.txt
-	mformat -f 1440 -C -B ../haribote/ipl10.bin -i haribote.img ::
+	mformat -f 1440 -C -B ../haribote/ipl20.bin -i haribote.img ::
 	mcopy ../haribote/haribote.sys -i haribote.img ::
 	mcopy $(APP).hrb -i haribote.img ::
 
