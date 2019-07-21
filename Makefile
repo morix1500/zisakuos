@@ -7,21 +7,20 @@ MAKE = make -r
 default :
 	$(MAKE) haribote.img
 
-haribote.img : haribote/ipl20.bin haribote/haribote.sys Makefile \
+haribote.img : haribote/ipl09.bin haribote/haribote.sys Makefile \
 	a/a.hrb hello3/hello3.hrb hello4/hello4.hrb \
 	winhelo/winhelo.hrb winhelo2/winhelo2.hrb winhelo3/winhelo3.hrb \
 	star1/star1.hrb stars/stars.hrb stars2/stars2.hrb \
 	lines/lines.hrb walk/walk.hrb noodle/noodle.hrb \
 	beepdown/beepdown.hrb color/color.hrb color2/color2.hrb \
 	sosu/sosu.hrb sosu2/sosu2.hrb sosu3/sosu3.hrb \
-	typeipl/typeipl.hrb cat/cat.hrb iroha/iroha.hrb \
+	cat/cat.hrb iroha/iroha.hrb \
 	chklang/chklang.hrb notrec/notrec.hrb bball/bball.hrb \
 	invader/invader.hrb calc/calc.hrb tview/tview.hrb \
 	gview/gview.hrb
-	mformat -f 1440 -C -B haribote/ipl20.bin -i haribote.img ::
+	mformat -f 1440 -C -B haribote/ipl09.bin -i haribote.img ::
 	mcopy haribote/haribote.sys -i haribote.img ::
-	mcopy haribote/ipl10.nas -i haribote.img ::
-	mcopy haribote/ipl20.nas -i haribote.img ::
+	mcopy haribote/ipl09.nas -i haribote.img ::
 	mcopy a/a.hrb -i haribote.img ::
 	mcopy hello3/hello3.hrb -i haribote.img ::
 	mcopy hello4/hello4.hrb -i haribote.img ::
@@ -40,7 +39,6 @@ haribote.img : haribote/ipl20.bin haribote/haribote.sys Makefile \
 	mcopy sosu/sosu.hrb -i haribote.img ::
 	mcopy sosu2/sosu2.hrb -i haribote.img ::
 	mcopy sosu3/sosu3.hrb -i haribote.img ::
-	mcopy typeipl/typeipl.hrb -i haribote.img ::
 	mcopy cat/cat.hrb -i haribote.img ::
 	mcopy iroha/iroha.hrb -i haribote.img ::
 	mcopy chklang/chklang.hrb -i haribote.img ::
