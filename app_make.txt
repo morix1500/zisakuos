@@ -11,6 +11,7 @@ RULEFILE = $(TOOLPATH)haribote/haribote.rul
 OBJ2BIM  = $(TOOLPATH)obj2bim
 BIM2HRB  = $(TOOLPATH)bim2hrb
 BIN2OBJ  = $(TOOLPATH)bin2obj
+BIM2BIN  = $(TOOLPATH)bim2bin
 MAKEFONT = $(TOOLPATH)makefont
 GOLIB    = $(TOOLPATH)golib00
 
@@ -22,9 +23,6 @@ default :
 $(APP).bim : $(APP).obj $(APILIBPATH)apilib.lib Makefile ../app_make.txt
 	$(OBJ2BIM) @$(RULEFILE) out:$(APP).bim map:$(APP).map stack:$(STACK) \
 		$(APP).obj $(APILIBPATH)apilib.lib
-
-$(APP).hrb : $(APP).bim Makefile ../app_make.txt
-	$(BIM2HRB) $(APP).bim $(APP).hrb $(MALLOC)
 
 haribote.img : ../haribote/ipl20.bin ../haribote/haribote.sys $(APP).hrb \
 	Makefile ../app_make.txt
@@ -41,6 +39,13 @@ haribote.img : ../haribote/ipl20.bin ../haribote/haribote.sys $(APP).hrb \
 
 %.obj : %.nas Makefile ../app_make.txt
 	$(NASK) $*.nas $*.obj $*.lst
+
+%.org : %.bim Makefile ../app_make.txt
+	$(BIM2HRB) $*.bim $*.org $(MALLOC)
+
+%.hrb : %.org Makefile ../app_make.txt
+	$(BIM2BIN) -osacmp in:$*.org out:$*.hrb
+
 
 run :
 	make haribote.img
